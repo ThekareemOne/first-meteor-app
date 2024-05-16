@@ -4,6 +4,7 @@ import { Meteor } from "meteor/meteor";
 import { Button, Navbar } from "flowbite-react";
 import { useNavigate, Link } from "react-router-dom";
 
+//TODO: Show Navbar for unauthenticated users
 const NavBar = () => {
   const isAuthenticated = useAuth();
   const navigate = useNavigate();

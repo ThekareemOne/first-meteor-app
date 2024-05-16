@@ -21,11 +21,11 @@ Articles.addLinks({
     collection: Meteor.users,
     field: "createdById",
   },
-  comments: {
-    collection: Comments,
-    inversedBy: "article",
-    type: "many",
-  },
+  // comments: {
+  //   collection: Comments,
+  //   inversedBy: "article",
+  //   type: "many",
+  // },
 });
 
 // TODO: Add after fixing the broken link between article and comments
