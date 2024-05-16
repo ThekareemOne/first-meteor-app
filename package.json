@@ -1,0 +1,61 @@
+{
+  "name": "first-meteor-app",
+  "private": true,
+  "scripts": {
+    "start": "meteor run",
+    "test": "meteor test --once --driver-package meteortesting:mocha",
+    "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
+    "visualize": "meteor --production --extra-packages bundle-visualizer"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.23.5",
+    "@types/simpl-schema": "^1.12.8",
+    "autoprefixer": "^10.4.16",
+    "flowbite": "^1.8.1",
+    "flowbite-react": "^0.6.1",
+    "formik": "^2.4.6",
+    "meteor-node-stubs": "^1.2.7",
+    "moment": "^2.30.1",
+    "postcss": "^8.4.31",
+    "postcss-load-config": "^4.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-query": "^3.39.3",
+    "react-router": "^6.23.1",
+    "react-router-dom": "^6.23.1",
+    "simpl-schema": "^3.4.6",
+    "tailwindcss": "^3.3.3",
+    "ts-node": "^10.9.2",
+    "yup": "^1.4.0"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.24.5",
+    "@babel/preset-react": "^7.24.1",
+    "@types/jest": "^29.5.12",
+    "@types/meteor": "^2.9.8",
+    "@types/meteor-roles": "^1.2.39",
+    "@types/mocha": "^8.2.3",
+    "@types/node": "^18.16.5",
+    "@types/react": "^18.2.5",
+    "@types/react-dom": "^18.2.4",
+    "autoprefixer": "^10.4.19",
+    "babel-plugin-module-resolver": "^5.0.2",
+    "eslint": "^9.2.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx": "^0.1.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-meteor": "^7.3.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-utils": "^3.0.0",
+    "typescript": "^4.9.5"
+  },
+  "meteor": {
+    "mainModule": {
+      "client": "client/main.tsx",
+      "server": "server/main.ts"
+    },
+    "testModule": "tests/main.ts"
+  }
+}
