@@ -17,6 +17,7 @@ export default function Article() {
       if (error) {
         console.error("Error fetching article:", error);
       } else {
+        console.log(result);
         setArticle(result);
       }
     });
@@ -69,7 +70,7 @@ export default function Article() {
             Date: {moment(article.createdOn).format("MMMM Do YYYY, h:mm:ss a")}
           </p>
           <p className="font-normal text-sm text-gray-500">
-            Author: {article.createdByName}
+            Author: {article.user?.profile.name}
           </p>
         </h5>
         <p className="font-normal text-gray-700">{article.description}</p>

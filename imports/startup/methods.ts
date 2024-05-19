@@ -75,30 +75,16 @@ Meteor.methods({
     check(articleId, String);
 
     const query = Articles.createQuery({
+      title: 1,
+      description: 1,
+      createdOn: 1,
+      createdById: 1,
+      user: { profile: 1 },
       $filters: { _id: articleId },
-      $options: {
-        fields: {
-          title: 1,
-          description: 1,
-          createdOn: 1,
-          createdById: 1,
-          user: 1,
-        },
-      },
+      commentCount: 1,
     });
 
     const article = query.fetchOne();
-
-    // console.log(article.user);
-    // returns undefined
-
-    if (article) {
-      const user = Meteor.users.findOne(article.createdById);
-
-      if (user) {
-        article.createdByName = user.profile.name;
-      }
-    }
 
     return article;
   },
