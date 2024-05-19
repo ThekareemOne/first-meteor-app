@@ -4,7 +4,6 @@ import { Meteor } from "meteor/meteor";
 import { Button, Navbar } from "flowbite-react";
 import { useNavigate, Link } from "react-router-dom";
 
-//TODO: Show Navbar for unauthenticated users
 const NavBar = () => {
   const isAuthenticated = useAuth();
   const navigate = useNavigate();
@@ -31,7 +30,11 @@ const NavBar = () => {
       </Navbar.Collapse>
     </Navbar>
   ) : (
-    <></>
+    <Navbar className="bg-sky-50 mb-4">
+      <div className="flex md:order-2">
+        <Link to="/login">Login</Link>
+      </div>
+    </Navbar>
   );
 };
 
