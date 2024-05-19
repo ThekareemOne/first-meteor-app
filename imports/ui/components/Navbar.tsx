@@ -31,9 +31,10 @@ const NavBar = () => {
     </Navbar>
   ) : (
     <Navbar className="bg-sky-50 mb-4">
-      <div className="flex md:order-2">
+      <Navbar.Collapse>
         <Link to="/login">Login</Link>
-      </div>
+        <Link to="/register">Register</Link>
+      </Navbar.Collapse>
     </Navbar>
   );
 };

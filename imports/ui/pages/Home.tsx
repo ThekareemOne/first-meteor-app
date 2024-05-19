@@ -6,6 +6,8 @@ import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "react-query";
 
+const PAGE_SIZE = 10;
+
 const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = searchParams.get("page") || 1;
@@ -22,7 +24,6 @@ const Home = () => {
     ["articles", currentPage, searchTextFinal],
     async () => {
       const response = await fetchArticles();
-      console.log(response);
       return response;
     },
     {
@@ -34,7 +35,7 @@ const Home = () => {
     return new Promise((resolve, reject) => {
       Meteor.call(
         "articles.getAll",
-        { page: currentPage, search: searchText },
+        { page: currentPage, pageSize: PAGE_SIZE, search: searchText },
         (error, result) => {
           if (error) {
             console.error("Error fetching articles:", error);
@@ -43,7 +44,7 @@ const Home = () => {
             const response = {
               articles: data,
               count: count,
-              pages: Math.ceil(count / parseFloat("10")),
+              pages: Math.ceil(count / parseFloat(`${PAGE_SIZE}`)),
             };
             resolve(response);
           }
@@ -53,7 +54,7 @@ const Home = () => {
   };
 
   const onPageChange = (page: number) => {
-    if (data.count < 10) return;
+    if (data.count < PAGE_SIZE) return;
     setCurrentPage(page);
     updateQueryParams(`${page}`);
   };

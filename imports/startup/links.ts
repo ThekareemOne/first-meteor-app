@@ -34,7 +34,7 @@ Articles.addReducers({
       comments: { _id: 1 },
     },
     reduce(article) {
-      const commentCount = article.comments.length;
+      const commentCount = article.comments?.length || 0;
       return commentCount;
     },
   },

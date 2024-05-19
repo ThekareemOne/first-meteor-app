@@ -12,12 +12,23 @@ Meteor.methods({
       );
     }
 
+    article.createdById = Meteor.userId();
+
     return Articles.insert(article);
   },
   "articles.update"(article) {
     check(article, Object);
 
     const { _id, title, description, modifiedOn } = article;
+
+    const existingArticle = Articles.findOne({ _id });
+
+    if (existingArticle.createdById !== Meteor.userId()) {
+      throw new Meteor.Error(
+        "not-authorized",
+        "You are not the creator of this article"
+      );
+    }
 
     Articles.update(
       { _id },
@@ -32,8 +43,9 @@ Meteor.methods({
 
     return _id;
   },
-  "articles.getAll"({ page, search }) {
+  "articles.getAll"({ page, pageSize, search }) {
     check(page, Number);
+    check(pageSize, Number);
     check(search, Match.Maybe(String));
 
     const baseQuery = {};
@@ -50,8 +62,8 @@ Meteor.methods({
       $options: {
         fields: { title: 1, createdOn: 1, createdById: 1 },
         sort: { createdOn: -1 },
-        limit: 10,
-        skip: (page - 1) * 10,
+        limit: pageSize,
+        skip: (page - 1) * pageSize,
       },
     });
 
@@ -97,6 +109,8 @@ Meteor.methods({
       );
     }
 
+    article.createdById = Meteor.userId();
+
     return Comments.insert(article);
   },
   "comments.delete"(commentId) {
@@ -105,7 +119,7 @@ Meteor.methods({
     if (!Meteor.userId()) {
       throw new Meteor.Error(
         "not-authorized",
-        "You must be logged in to insert an article."
+        "You must be logged in to delete a comment."
       );
     }
 

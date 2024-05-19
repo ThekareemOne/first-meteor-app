@@ -1,5 +1,6 @@
 import { Meteor } from "meteor/meteor";
-import { Card, TextInput, Button, Alert } from "flowbite-react";
+import { Card, TextInput, Button, Alert, Toast } from "flowbite-react";
+import { HiX } from "react-icons/hi";
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { useParams } from "react-router-dom";
@@ -9,6 +10,7 @@ import { Comments } from "/imports/api/comments";
 export default function Article() {
   const [article, setArticle] = useState({});
   const [comment, setComment] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
   const { id } = useParams();
   const userId = Meteor.userId();
 
@@ -17,7 +19,6 @@ export default function Article() {
       if (error) {
         console.error("Error fetching article:", error);
       } else {
-        console.log(result);
         setArticle(result);
       }
     });
@@ -25,10 +26,22 @@ export default function Article() {
 
   const comments = useTracker(() => {
     Meteor.subscribe("comments", id);
+
     const comments = Comments.find(
       { articleId: id },
       { sort: { createdOn: 1 } }
     ).fetch();
+
+    const usersInComments = comments.map((comment) => comment.createdById);
+    const users = Meteor.users.find({ _id: { $in: usersInComments } }).fetch();
+
+    comments.forEach(
+      (comment) =>
+        (comment.user = users.find((user) => user._id === comment.createdById))
+    );
+
+    console.log(comments);
+
     return comments;
   });
 
@@ -36,7 +49,7 @@ export default function Article() {
     if (comment.trim() !== "") {
       Meteor.call(
         "comments.insert",
-        { text: comment, articleId: id, createdById: userId },
+        { text: comment, articleId: id },
         (error) => {
           if (error) {
             console.error("Error creating comment:", error);
@@ -52,6 +65,7 @@ export default function Article() {
     Meteor.call("comments.delete", commentId, (error) => {
       if (error) {
         console.error("Error creating comment:", error);
+        setErrorMessage(error.reason);
       } else {
         setComment("");
       }
@@ -86,6 +100,14 @@ export default function Article() {
             <Button onClick={addComment}>Add</Button>
           </div>
         )}
+        {errorMessage && (
+          <Toast>
+            <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
+              <HiX className="h-5 w-5" />
+            </div>
+            <div className="ml-3 text-sm font-normal">{errorMessage}</div>
+          </Toast>
+        )}
         {comments &&
           comments.map((comment) => (
             <Alert
@@ -94,7 +116,13 @@ export default function Article() {
               color="success"
               onDismiss={() => removeComment(comment._id)}
             >
-              {comment.text}
+              <p>{comment.text}</p>
+              <p className="text-xs text-gray-500">
+                {comment.user?.profile.name}
+              </p>
+              <p className="text-xs text-gray-500">
+                {moment(comment.createdOn).format("MMMM Do YYYY, h:mm:ss a")}
+              </p>
             </Alert>
           ))}
       </Card>

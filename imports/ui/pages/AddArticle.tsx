@@ -26,7 +26,6 @@ const AddArticle = () => {
       title: values.title,
       description: values.description,
       createdOn: new Date(),
-      createdById: Meteor.userId(),
     };
     Meteor.call("articles.insert", article, (error, articleId) => {
       setSubmitting(false);
